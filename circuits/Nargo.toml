@@ -1,0 +1,6 @@
+[package]
+name = "semaphore.nr"
+type = "bin"
+authors = [""]
+
+[dependencies]
