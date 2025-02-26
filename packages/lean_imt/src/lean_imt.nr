@@ -37,14 +37,11 @@ where
     T: Eq + Default,
 {
     fn calculate_root<let N: u32>(self, leaf: T, indexes: Field, hash_path: [T; N]) -> T {
-        println(f"N: {N}");
         let index_bits: [u1; N] = indexes.to_le_bits();
         let mut node = leaf;
         for i in 0..hash_path.len() {
             let sibling = hash_path[i];
-            println(f"sibling: {sibling}");
             if sibling != T::default() {
-                println("not default");
                 if index_bits[i] == 0 {
                     let left = node;
                     let right = sibling;
