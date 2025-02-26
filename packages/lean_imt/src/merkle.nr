@@ -1,6 +1,25 @@
+pub use crate::types::{Calculator, MT_Creator, MembershipProver};
+
 pub struct MerkleTree<T> {
     pub root: T,
     pub hasher: fn([T; 2]) -> T,
+}
+
+impl<T> MT_Creator<T> for MerkleTree<T>
+where
+    T: Eq + Default,
+{
+    fn default(root: T, hasher: fn([T; 2]) -> T) -> Self {
+        Self { root, hasher }
+    }
+
+    fn from(root: T, hasher: fn([T; 2]) -> T) -> Self {
+        Self::default(root, hasher)
+    }
+
+    fn new(hasher: fn([T; 2]) -> T) -> Self {
+        Self::from(T::default(), hasher)
+    }
 }
 
 impl<T> MembershipProver<T, T> for MerkleTree<T>
