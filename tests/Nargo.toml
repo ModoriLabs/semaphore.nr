@@ -1,0 +1,6 @@
+[package]
+name = "semaphore_tests"
+type = "lib"
+authors = [""]
+
+[dependencies]
