@@ -1,6 +1,6 @@
 [package]
-name = "semaphore.nr"
-type = "bin"
+name = "lean_imt"
+type = "lib"
 authors = [""]
 
 [dependencies]

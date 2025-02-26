@@ -1,0 +1,7 @@
+[package]
+name = "semaphore_tests"
+type = "lib"
+authors = [""]
+
+[dependencies]
+lean_imt = { path = "../packages/lean_imt" }
