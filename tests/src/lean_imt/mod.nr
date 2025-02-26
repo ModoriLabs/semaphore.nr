@@ -17,7 +17,6 @@ fn test_merkle_tree_root() {
     println(f"root: {root}");
 }
 
-// TODO: pass this test with Lean-IMT
 #[test]
 fn test_lean_incremental_merkle_tree_root() {
     let mut nodes = [0x01, 0x02, 0x03, 0x04, 0x05];
@@ -33,16 +32,31 @@ fn test_lean_incremental_merkle_tree_root() {
 
     let mt = LeanMerkleTree::from(expected_root, pedersen_hash);
 
-    let root = mt.calculate_root(0x05, 0x04, [internal[2]]);
+    let root = mt.calculate_root(nodes[4], 0x04, [0x00, 0x00, internal[2]]);
     println(f"root: {root}");
-
-    // Another check
-    // mt.membership(0x01, 0x00, [0x02, 0x0714067c255d6ff2d20d01d74654d05ec8fcb214a4a3971504a465d8a3b8b0c8, 0x05]);
-
-    // assert(root == expected_root);
+    assert(root == expected_root);
 }
 
-// TODO: test the roots of lean-imt and merkle tree are the same when the size is  2^n
+#[test]
+fn test_lean_incremental_merkle_tree_root_with_zero_nodes() {
+    let expected_root = 0x00;
+    let mt = LeanMerkleTree::from(expected_root, pedersen_hash);
+
+    let root = mt.calculate_root(0x00, 0x00, []);
+    println(f"root: {root}");
+    assert(root == expected_root);
+}
+
+#[test]
+fn test_lean_incremental_merkle_tree_root_with_one_node() {
+    let mut nodes = [0x01];
+    let expected_root = nodes[0];
+    let mt = LeanMerkleTree::from(expected_root, pedersen_hash);
+
+    let root = mt.calculate_root(nodes[0], 0x00, [0x00]);
+    println(f"root: {root}");
+    assert(root == expected_root);
+}
 
 // 01 02 03 04 05
 #[test]
