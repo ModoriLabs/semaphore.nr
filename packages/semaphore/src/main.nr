@@ -24,19 +24,21 @@ fn eddsa_to_pub(secret: Field) -> Curve<BabyJubJubParams> {
 
 // TODO: set private inputs
 fn main(
+    root: Field,
     secret: Field,
     indexes: Field,
     paths: [Field; MAX_DEPTH], // TODO: check BoundedVec
-    scope: Field,
-    message: Field
+    scope: pub Field,
+    message: pub Field
 ) -> pub (Field, Field) {
     let leaf = commit_identity(secret);
     // FIXME: temporary root 0x00 is given
     let mt = LeanMerkleTree::from(0x00, poseidon::bn254::hash_2);
-    let root = mt.calculate_root(leaf, indexes, paths);
+    let calculated_root = mt.calculate_root(leaf, indexes, paths);
     let nullifier = poseidon::bn254::hash_2([scope, secret]);
 
-    (root, nullifier)
+    assert(root == calculated_root);
+    (calculated_root, nullifier)
 }
 
 #[test]
@@ -71,16 +73,19 @@ fn test_main() {
 
     let mut internal = [0x00; 32];
     internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]);
+    println(internal[0]); // 0x06d328e1ca024bb8747475691c0eaedb37adddc8689ce68fe4114c1e039fb31d
     internal[1] = poseidon::bn254::hash_2([identities[2], identities[3]]);
+    println(internal[1]); // 0x24aec9f2eab663b33cf2c6e191ec843cb78a3f586995296edc33beb3457e015e
     internal[2] = poseidon::bn254::hash_2([internal[0], internal[1]]);
+    println(internal[2]); // 0x1d04d957ef6364c51a27258dd9ca5622e2113cba6858e4634fdb2ff12743c909
     let expected_root = poseidon::bn254::hash_2([internal[2], identities[4]]);
+    println(expected_root); // 0x1c709df0fc4393283665d98bd1f73a461a6a74f57c45ece9c192a88a389f8fd9
 
     paths[0] = 0x00;
     paths[1] = 0x00;
     paths[2] = internal[2];
-    let (root, nullifier) = main(secrets[4], indexes, paths, scope, message);
+    let (root, nullifier) = main(expected_root, secrets[4], indexes, paths, scope, message);
     println(f"root: {root}");
-    println(f"expected_root: {expected_root}");
 
     assert(root == expected_root);
 }
