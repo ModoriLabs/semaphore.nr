@@ -1,6 +1,6 @@
-use std::hash::pedersen_hash;
-use lean_imt::merkle::{MerkleTree, MT_Creator, MembershipProver};
+use BoundedVec;
 use lean_imt::lean_imt::LeanMerkleTree;
+use std::hash::pedersen_hash;
 
 #[test]
 fn test_merkle_tree_root() {
@@ -32,7 +32,8 @@ fn test_lean_incremental_merkle_tree_root() {
 
     let mt = LeanMerkleTree::from(expected_root, pedersen_hash);
 
-    let root = mt.calculate_root(nodes[4], 0x04, [0x00, 0x00, internal[2]]);
+    let hash_path: BoundedVec<Field, 1> = BoundedVec::from_array([internal[2]]);
+    let root = mt.calculate_root(nodes[4], 0x01, hash_path);
     println(f"root: {root}");
     assert(root == expected_root);
 }
@@ -42,7 +43,8 @@ fn test_lean_incremental_merkle_tree_root_with_zero_nodes() {
     let expected_root = 0x00;
     let mt = LeanMerkleTree::from(expected_root, pedersen_hash);
 
-    let root = mt.calculate_root(0x00, 0x00, []);
+    let path: BoundedVec<Field, 1> = BoundedVec::new();
+    let root = mt.calculate_root(0x00, 0x00, path);
     println(f"root: {root}");
     assert(root == expected_root);
 }
@@ -53,7 +55,9 @@ fn test_lean_incremental_merkle_tree_root_with_one_node() {
     let expected_root = nodes[0];
     let mt = LeanMerkleTree::from(expected_root, pedersen_hash);
 
-    let root = mt.calculate_root(nodes[0], 0x00, [0x00]);
+    let path: BoundedVec<Field, 1> = BoundedVec::new();
+
+    let root = mt.calculate_root(nodes[0], 0x00, path);
     println(f"root: {root}");
     assert(root == expected_root);
 }
@@ -65,7 +69,11 @@ fn test_merkle_tree_membership() {
     let mt = LeanMerkleTree::from(root, pedersen_hash);
 
     let leaf = 0x01;
-    let paths = [0x02, 0x0714067c255d6ff2d20d01d74654d05ec8fcb214a4a3971504a465d8a3b8b0c8, 0x05];
+    let paths: BoundedVec<Field, 3> = BoundedVec::from_array([
+        0x02,
+        0x0714067c255d6ff2d20d01d74654d05ec8fcb214a4a3971504a465d8a3b8b0c8,
+        0x05,
+    ]);
 
     mt.membership(leaf, 0x00, paths);
     println(f"root: {root}");

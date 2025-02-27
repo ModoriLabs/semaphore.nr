@@ -1,5 +1,10 @@
 pub trait Calculator<T, K> {
-    fn calculate_root<let N: u32>(self, entry: K, indexes: Field, hash_path: [T; N]) -> T;
+    fn calculate_root<let N: u32>(
+        self,
+        entry: K,
+        indexes: Field,
+        hash_path: BoundedVec<T, N>,
+    ) -> T;
 }
 
 pub trait LIMT_Creator<T> {
@@ -42,5 +47,5 @@ pub trait MembershipProver<T, K> {
      * @param leaf The leaf to prove
      * @param path The hash path and indices
      */
-    pub fn membership<let N: u32>(self, entry: K, indexes: Field, hash_path: [T; N]);
+    pub fn membership<let N: u32>(self, entry: K, indexes: Field, hash_path: BoundedVec<T, N>);
 }
