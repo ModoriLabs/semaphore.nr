@@ -1,8 +1,11 @@
 use edwards::{Curve};
 use edwards::bjj::BabyJubJubParams;
 use edwards::ScalarField;
-use std::hash::poseidon;
-use std::ops::Add;
+use std::{hash::poseidon};
+use lean_imt::lean_imt::{LeanMerkleTree, Calculator};
+
+// TODO: change this to the actual max depth
+global MAX_DEPTH: u32 = 16;
 
 fn commit_identity(secret: Field) -> Field {
     let eddsa_pub = eddsa_to_pub(secret);
@@ -19,21 +22,65 @@ fn eddsa_to_pub(secret: Field) -> Curve<BabyJubJubParams> {
     base_point.mul(secret_scalar)
 }
 
-fn main() {
-    let (bx, by) = BabyJubJubParams::gen();
-    let point: Curve<BabyJubJubParams> = Curve { x: bx, y: by };
+// TODO: set private inputs
+fn main(
+    secret: Field,
+    indexes: Field,
+    paths: [Field; MAX_DEPTH], // TODO: check BoundedVec
+    scope: Field,
+    message: Field
+) -> pub (Field, Field) {
+    let leaf = commit_identity(secret);
+    // FIXME: temporary root 0x00 is given
+    let mt = LeanMerkleTree::from(0x00, poseidon::bn254::hash_2);
+    let root = mt.calculate_root(leaf, indexes, paths);
+    let nullifier = poseidon::bn254::hash_2([scope, secret]);
 
-    let mul_result = eddsa_to_pub(2);
-    let add_result = point.add(point);
-    assert(mul_result == add_result);
-    println(f"mul_result: {mul_result}");
-    println(f"add_result: {add_result}");
-
-    let commit_identity = commit_identity(2);
-    println(f"commit_identity: {commit_identity}");
+    (root, nullifier)
 }
 
 #[test]
+fn test_commit_identity() {
+    let secret = 0x02;
+    let (bx, by) = BabyJubJubParams::gen();
+    let point: Curve<BabyJubJubParams> = Curve { x: bx, y: by };
+    let secret_scalar: ScalarField<63> = ScalarField::from(secret);
+    let pub_key = point.mul(secret_scalar);
+    let expected = poseidon::bn254::hash_2([pub_key.x, pub_key.y]);
+
+    let result = commit_identity(secret);
+    assert(result == expected);
+    println(f"result: {result}");
+    println(f"expected: {expected}");
+}
+
+// poseidon(1B) = 0x1f8dd4a8d9c95bc9e87a9074914e04dccf3cd308ad6d0848df14ea5752e2b298
+// poseidon(2B) = 0x05415952b4ee4ce9eaabe1968363381648371c7b27e015042b89e9d8fef636c7
+// poseidon(3B) = 0x0ad543ec877959363038bd7964b835c39e73eb015f7e10f46b1418ee0657c72a
+// poseidon(4B) = 0x2d85e11b9548fdce70f9ea8d4245fd6d27046857122b2b13d29a4f151ffbbaf7
+// poseidon(5B) = 0x1c23eca7cb35d494c832d3a19bab0d4abfc4fbc3958ac82650fc25ec7ab3532e
+#[test]
 fn test_main() {
-    main();
+    let root = 0x00;
+    let secrets = [0x01, 0x02, 0x03, 0x04, 0x05];
+    let identities = [commit_identity(secrets[0]), commit_identity(secrets[1]), commit_identity(secrets[2]), commit_identity(secrets[3]), commit_identity(secrets[4])];
+    let indexes = 0x04;
+    let mut paths = [0x00; MAX_DEPTH];
+    let scope = 0x00;
+    let message = 0x00;
+
+    let mut internal = [0x00; 32];
+    internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]);
+    internal[1] = poseidon::bn254::hash_2([identities[2], identities[3]]);
+    internal[2] = poseidon::bn254::hash_2([internal[0], internal[1]]);
+    let expected_root = poseidon::bn254::hash_2([internal[2], identities[4]]);
+
+    paths[0] = 0x00;
+    paths[1] = 0x00;
+    paths[2] = internal[2];
+    let (root, nullifier) = main(secrets[4], indexes, paths, scope, message);
+    println(f"root: {root}");
+    println(f"expected_root: {expected_root}");
+
+    assert(root == expected_root);
 }
