@@ -81,6 +81,7 @@ fn test_main() {
 
     let paths: BoundedVec<Field, MAX_PATH_LENGTH> = BoundedVec::from_array([internal[2]]);
     let (root, nullifier) = main(expected_root, secrets[4], indexes, paths, scope, message);
+    println(f"nullifier: {nullifier}");
     println(f"root: {root}");
 
     assert(root == expected_root);
