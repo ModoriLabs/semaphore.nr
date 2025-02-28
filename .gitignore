@@ -1,2 +1,4 @@
 packages/semaphore/Prover.toml
 packages/semaphore/target/
+packages/js/node_modules
+.DS_Store
