@@ -85,6 +85,7 @@ fn test_main() {
     paths[1] = 0x00;
     paths[2] = internal[2];
     let (root, nullifier) = main(expected_root, secrets[4], indexes, paths, scope, message);
+    println(f"nullifier: {nullifier}");
     println(f"root: {root}");
 
     assert(root == expected_root);
