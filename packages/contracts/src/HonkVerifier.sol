@@ -2,8 +2,6 @@
 // Copyright 2022 Aztec
 pragma solidity >=0.8.21;
 
-import "forge-std/console.sol";
-
 uint256 constant N = 65536;
 uint256 constant LOG_N = 16;
 uint256 constant NUMBER_OF_PUBLIC_INPUTS = 4;
@@ -694,16 +692,12 @@ library TranscriptLib {
         uint256 boundary = 0x460;
 
         // Sumcheck univariates
-        // 2^28
-        // 8
         for (uint256 i = 0; i < CONST_PROOF_SIZE_LOG_N; i++) {
             for (uint256 j = 0; j < BATCHED_RELATION_PARTIAL_LENGTH; j++) {
                 p.sumcheckUnivariates[i][j] = bytesToFr(proof[boundary:boundary + 0x20]);
                 boundary += 0x20;
-                console.log("boundary", boundary);
             }
         }
-        console.log("boundary", boundary);
         // Sumcheck evaluations
         for (uint256 i = 0; i < NUMBER_OF_ENTITIES; i++) {
             p.sumcheckEvaluations[i] = bytesToFr(proof[boundary:boundary + 0x20]);
@@ -1590,16 +1584,12 @@ abstract contract BaseHonkVerifier is IVerifier {
     function loadVerificationKey() internal pure virtual returns (Honk.VerificationKey memory);
 
     function verify(bytes calldata proof, bytes32[] calldata publicInputs) public view override returns (bool) {
-        console.log("verify!");
         Honk.VerificationKey memory vk = loadVerificationKey();
-        console.log("vk loaded!");
         Honk.Proof memory p = TranscriptLib.loadProof(proof);
-        console.log("proof loaded", proof.length);
 
         if (publicInputs.length != vk.publicInputsSize) {
             revert PublicInputsLengthWrong();
         }
-        console.log("publicInputs.length", publicInputs.length);
 
         // Generate the fiat shamir challenges for the whole protocol
         Transcript memory t = TranscriptLib.generateTranscript(p, publicInputs, vk.publicInputsSize);
@@ -1611,11 +1601,9 @@ abstract contract BaseHonkVerifier is IVerifier {
 
         // Sumcheck
         bool sumcheckVerified = verifySumcheck(p, t);
-        console.log("sumcheckVerified", sumcheckVerified);
         if (!sumcheckVerified) revert SumcheckFailed();
 
         bool shpleminiVerified = verifyShplemini(p, vk, t);
-        console.log("shpleminiVerified", shpleminiVerified);
         if (!shpleminiVerified) revert ShpleminiFailed();
 
         return sumcheckVerified && shpleminiVerified; // Boolean condition not required - nice for vanity :)
