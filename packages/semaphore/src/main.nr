@@ -22,7 +22,6 @@ fn eddsa_to_pub(secret: Field) -> Curve<BabyJubJubParams> {
     base_point.mul(secret_scalar)
 }
 
-// TODO: set private inputs
 fn main(
     root: Field,
     secret: Field,
