@@ -16,7 +16,9 @@ fn commit_identity(secret: Field) -> Field {
 
 fn eddsa_to_pub(secret: Field) -> Curve<BabyJubJubParams> {
     let (bx, by) = BabyJubJubParams::gen();
-    let base_point: Curve<BabyJubJubParams> = Curve { x: bx, y: by };
+    // We know that the point is on the curve, so Curve::new is not needed
+    // https://github.com/noir-lang/noir-edwards/blob/main/src/lib.nr#L132
+    let base_point: Curve<BabyJubJubParams> = Curve::from((bx, by));
     let secret_scalar: ScalarField<63> = ScalarField::from(secret);
 
     base_point.mul(secret_scalar)
