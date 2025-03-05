@@ -12,4 +12,6 @@ bb write_vk_ultra_keccak_honk -b ./target/semaphore.json -o ./target/vk -c ~/.bb
 echo "Generating solidity verifier..."
 bb contract_ultra_honk -k ./target/vk -c ~/.bb-crs -o ./target/Verifier.sol
 
+mv ./target/Verifier.sol ../contracts/src/HonkVerifier.sol
+
 echo "Done"

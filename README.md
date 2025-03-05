@@ -11,13 +11,16 @@ git submodule update
 # Build circuits, generate verifier contract
 (cd packages/semaphore && ./script/build.sh)
 
+# Replace Verifier contract if necessary
+mv Verifier.sol to ../packages/contracts/HonkVerifier.sol
+
 # Use JS to generate proof and save to a file
 cd js
 npm install
 npx ts-node generate-proof.ts
 
 # foundry test read generated proof and verify
-(cd pakcages/contracts && forge test --optimize --optimizer-runs 5000 --gas-report -vvv)
+(cd packages/contracts && forge test --optimize --optimizer-runs 5000 --gas-report -vvv)
 ```
 
 <img width="895" alt="Image" src="https://github.com/user-attachments/assets/77c9edf9-4ec7-449a-b805-4196ee55822e" />

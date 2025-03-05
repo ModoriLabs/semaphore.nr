@@ -12,12 +12,48 @@ import { Noir } from "@noir-lang/noir_js";
 
     const inputs = {
       root: "0x1c709df0fc4393283665d98bd1f73a461a6a74f57c45ece9c192a88a389f8fd9",
-      indexes: "4",
+      indexes: "1", // NOTE: The 5th leaf has only one sibling
       message: "1",
-      paths: ["0", "0", "0x1d04d957ef6364c51a27258dd9ca5622e2113cba6858e4634fdb2ff12743c909", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+      paths: {
+        len: "1",
+        storage: [
+          "0x1d04d957ef6364c51a27258dd9ca5622e2113cba6858e4634fdb2ff12743c909",
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+        ],
+      },
       scope: "1",
-      secret: "5"
-    }
+      secret: "5",
+    };
     const { witness } = await noir.execute(inputs);
     const { proof, publicInputs } = await honk.generateProof(witness, { keccak: true });
 
