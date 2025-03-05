@@ -1,0 +1,8 @@
+{
+  "name": "semaphore.noir",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "packageManager": "yarn@4.1.0"
+}

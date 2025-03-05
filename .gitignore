@@ -1,4 +1,15 @@
+node_modules
+
 packages/semaphore/Prover.toml
 packages/semaphore/target/
 packages/js/node_modules
 .DS_Store
+
+# yarn v3
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

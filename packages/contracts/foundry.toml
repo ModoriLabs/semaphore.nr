@@ -3,6 +3,12 @@ src = "src"
 out = "out"
 libs = ["lib"]
 fs_permissions = [{ access = "read-write", path = "../semaphore/target/proof-clean"}]
+remappings = [
+  "poseidon-solidity/=../../node_modules/poseidon-solidity/",
+  "@zk-kit/lean-imt.sol/=../../node_modules/@zk-kit/lean-imt.sol/",
+]
+allow_paths = ["../../node_modules"]
+
 ffi = true
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
