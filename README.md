@@ -25,6 +25,7 @@ npx ts-node generate-proof.ts
 ## Test
 
 ```sh
+(cd packages/semaphore && nargo test)
 (cd tests && nargo test)
 ```
 
