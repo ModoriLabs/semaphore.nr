@@ -4,8 +4,7 @@ use edwards::ScalarField;
 use std::{hash::poseidon};
 use lean_imt::lean_imt::{LeanMerkleTree, Calculator};
 
-// TODO: change this to the actual max depth
-global MAX_DEPTH: u32 = 16;
+global MAX_PATH_LENGTH: u32 = 32;
 
 fn commit_identity(secret: Field) -> Field {
     let eddsa_pub = eddsa_to_pub(secret);
@@ -28,7 +27,7 @@ fn main(
     root: Field,
     secret: Field,
     indexes: Field,
-    paths: [Field; MAX_DEPTH], // TODO: check BoundedVec
+    paths: BoundedVec<Field, MAX_PATH_LENGTH>,
     scope: pub Field,
     message: pub Field
 ) -> pub (Field, Field) {
@@ -67,8 +66,8 @@ fn test_main() {
     let root = 0x00;
     let secrets = [0x01, 0x02, 0x03, 0x04, 0x05];
     let identities = [commit_identity(secrets[0]), commit_identity(secrets[1]), commit_identity(secrets[2]), commit_identity(secrets[3]), commit_identity(secrets[4])];
-    let indexes = 0x04;
-    let mut paths = [0x00; MAX_DEPTH];
+    // NOTE: The index of the leaf 0x05 is 0x01 because only one hash path is given
+    let indexes = 0x01;
     let scope = 0x00;
     let message = 0x00;
 
@@ -82,9 +81,7 @@ fn test_main() {
     let expected_root = poseidon::bn254::hash_2([internal[2], identities[4]]);
     println(expected_root); // 0x1c709df0fc4393283665d98bd1f73a461a6a74f57c45ece9c192a88a389f8fd9
 
-    paths[0] = 0x00;
-    paths[1] = 0x00;
-    paths[2] = internal[2];
+    let paths: BoundedVec<Field, MAX_PATH_LENGTH> = BoundedVec::from_array([internal[2]]);
     let (root, nullifier) = main(expected_root, secrets[4], indexes, paths, scope, message);
     println(f"nullifier: {nullifier}");
     println(f"root: {root}");
