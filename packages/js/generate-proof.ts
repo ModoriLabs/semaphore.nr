@@ -11,7 +11,6 @@ import { Noir } from "@noir-lang/noir_js";
     const honk = new UltraHonkBackend(circuit.bytecode, { threads: 1 });
 
     const inputs = {
-      root: "0x1c709df0fc4393283665d98bd1f73a461a6a74f57c45ece9c192a88a389f8fd9",
       indexes: "1", // NOTE: The 5th leaf has only one sibling
       message: "1",
       paths: {

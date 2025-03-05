@@ -24,7 +24,6 @@ fn eddsa_to_pub(secret: Field) -> Curve<BabyJubJubParams> {
 }
 
 fn main(
-    root: Field,
     secret: Field,
     indexes: Field,
     paths: BoundedVec<Field, MAX_PATH_LENGTH>,
@@ -36,8 +35,6 @@ fn main(
     let mt = LeanMerkleTree::from(0x00, poseidon::bn254::hash_2);
     let calculated_root = mt.calculate_root(leaf, indexes, paths);
     let nullifier = poseidon::bn254::hash_2([scope, secret]);
-
-    assert(root == calculated_root);
     (calculated_root, nullifier)
 }
 
@@ -82,7 +79,7 @@ fn test_main() {
     println(expected_root); // 0x1c709df0fc4393283665d98bd1f73a461a6a74f57c45ece9c192a88a389f8fd9
 
     let paths: BoundedVec<Field, MAX_PATH_LENGTH> = BoundedVec::from_array([internal[2]]);
-    let (root, nullifier) = main(expected_root, secrets[4], indexes, paths, scope, message);
+    let (root, nullifier) = main(secrets[4], indexes, paths, scope, message);
     println(f"nullifier: {nullifier}");
     println(f"root: {root}");
 
