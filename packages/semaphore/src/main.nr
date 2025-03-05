@@ -4,7 +4,7 @@ use edwards::ScalarField;
 use std::{hash::poseidon};
 use lean_imt::lean_imt::{LeanMerkleTree, Calculator};
 
-global MAX_PATH_LENGTH: u32 = 256;
+global MAX_PATH_LENGTH: u32 = 32;
 
 fn commit_identity(secret: Field) -> Field {
     let eddsa_pub = eddsa_to_pub(secret);
@@ -66,6 +66,7 @@ fn test_main() {
     let root = 0x00;
     let secrets = [0x01, 0x02, 0x03, 0x04, 0x05];
     let identities = [commit_identity(secrets[0]), commit_identity(secrets[1]), commit_identity(secrets[2]), commit_identity(secrets[3]), commit_identity(secrets[4])];
+    // NOTE: The index of the leaf 0x05 is 0x01 because only one hash path is given
     let indexes = 0x01;
     let scope = 0x00;
     let message = 0x00;
