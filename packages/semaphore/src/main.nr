@@ -27,8 +27,8 @@ fn main(
     secret: Field,
     indexes: Field,
     paths: BoundedVec<Field, MAX_PATH_LENGTH>,
+    message: pub Field,
     scope: pub Field,
-    message: pub Field
 ) -> pub (Field, Field) {
     let leaf = commit_identity(secret);
     // FIXME: temporary root 0x00 is given
@@ -64,8 +64,8 @@ fn test_main() {
     let identities = [commit_identity(secrets[0]), commit_identity(secrets[1]), commit_identity(secrets[2]), commit_identity(secrets[3]), commit_identity(secrets[4])];
     // NOTE: The index of the leaf 0x05 is 0x01 because only one hash path is given
     let indexes = 0x01;
-    let message = 0x00;
-    let scope = 0x00;
+    let message = 0x01;
+    let scope = 0x01;
 
     let mut internal = [0x00; 32];
     internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]);
@@ -78,8 +78,8 @@ fn test_main() {
     println(expected_root); // 0x1c709df0fc4393283665d98bd1f73a461a6a74f57c45ece9c192a88a389f8fd9
 
     let paths: BoundedVec<Field, MAX_PATH_LENGTH> = BoundedVec::from_array([internal[2]]);
-    let (root, nullifier) = main(secrets[4], indexes, paths, scope, message);
-    println(f"nullifier: {nullifier}");
+    let (root, nullifier) = main(secrets[4], indexes, paths, message, scope);
+    println(f"nullifier: {nullifier}"); // 0x07a76f71ef648dd62cdea92af5fe42fe84ef256a22d5f292b6381d1265fa7f89
     println(f"root: {root}");
 
     assert(root == expected_root);
@@ -110,7 +110,7 @@ fn test_main2() {
     println(expected_root); // 0x265aad7d885c5a4d4bece302f04ac298982800c85490983594290ef693fcaf55
 
     let paths: BoundedVec<Field, MAX_PATH_LENGTH> = BoundedVec::from_array([identities[1], identities[2]]);
-    let (root, nullifier) = main(secrets[0], indexes, paths, scope, message);
+    let (root, nullifier) = main(secrets[0], indexes, paths, message, scope);
     println(f"nullifier: {nullifier}"); // 0x15fc910d3c6dc6bf2362c2c1c15a8bebef733c5f6d4e1b2143e59cf9daaee6e9
     println(f"root: {root}"); // 0x265aad7d885c5a4d4bece302f04ac298982800c85490983594290ef693fcaf55
 

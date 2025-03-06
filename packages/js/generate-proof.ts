@@ -13,6 +13,8 @@ import { Noir } from "@noir-lang/noir_js";
     const inputs = {
       indexes: "1", // NOTE: The 5th leaf has only one sibling
       message: "1",
+      scope: "1",
+      secret: "5",
       paths: {
         len: "1",
         storage: [
@@ -50,8 +52,6 @@ import { Noir } from "@noir-lang/noir_js";
           0,
         ],
       },
-      scope: "1",
-      secret: "5",
     };
     const { witness } = await noir.execute(inputs);
     const { proof, publicInputs } = await honk.generateProof(witness, { keccak: true });
