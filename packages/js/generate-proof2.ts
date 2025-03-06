@@ -13,7 +13,7 @@ import { Noir } from "@noir-lang/noir_js";
     // Three leaves case in test_main2
     // https://github.com/semaphore-protocol/semaphore/blob/main/packages/contracts/test/Semaphore.ts#L326-L328
     const inputs = {
-      indexes: "0", // NOTE: The 5th leaf has only one sibling
+      indexes: "0", // NOTE: The 1th leaf has only one sibling
       message: "0x00405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5a", // uint256(keccak256(abi.encodePacked(uint256(2)))) >> 8
       paths: {
         len: "2",

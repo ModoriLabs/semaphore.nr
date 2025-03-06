@@ -176,10 +176,11 @@ contract SemaphoreHonk is ISemaphoreHonk, SemaphoreGroups {
         }
 
         bytes32[] memory publicInputs = new bytes32[](4);
-        publicInputs[0] = bytes32(proof.merkleTreeRoot);
-        publicInputs[1] = bytes32(proof.nullifier);
-        publicInputs[2] = bytes32(_hash(proof.message));
-        publicInputs[3] = bytes32(_hash(proof.scope));
+        // FIXME: message and scope order is reversed
+        publicInputs[1] = bytes32(_hash(proof.message));
+        publicInputs[0] = bytes32(_hash(proof.scope));
+        publicInputs[2] = bytes32(proof.merkleTreeRoot);
+        publicInputs[3] = bytes32(proof.nullifier);
 
         // TODO: choose verifier key depending on proof.merkleTreeDepth
         return verifier.verify(proof.proof, publicInputs);

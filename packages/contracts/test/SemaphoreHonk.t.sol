@@ -30,24 +30,20 @@ contract SemaphoreHonkTest is Test {
             semaphore.addMember(groupId, identityCommitments[i]);
         }
 
-        bytes memory honkProof = vm.readFileBinary(
+        bytes memory proof = vm.readFileBinary(
             "../semaphore/target/proof-clean2"
         );
 
-        console.log(_hash(2));
-        console.log(_hash(0));
-
-        // TODO: message, and scope should be _hash
-        ISemaphoreHonk.SemaphoreHonkProof memory proof = ISemaphoreHonk.SemaphoreHonkProof({
+        ISemaphoreHonk.SemaphoreHonkProof memory honkProof = ISemaphoreHonk.SemaphoreHonkProof({
             merkleTreeDepth: 32,
             merkleTreeRoot: 0x265aad7d885c5a4d4bece302f04ac298982800c85490983594290ef693fcaf55,
-            nullifier: 0x2b6ae7250aa96afee81cb0ed558d267e6d4f3d5355e9b8fbc2c3e0192f0a872a,
-            proof: honkProof,
-            message: _hash(2),
-            scope: _hash(0)
+            nullifier:      0x15fc910d3c6dc6bf2362c2c1c15a8bebef733c5f6d4e1b2143e59cf9daaee6e9,
+            proof: proof,
+            message: 2,
+            scope: 0
         });
 
-        semaphore.validateProof(groupId, proof);
+        semaphore.validateProof(groupId, honkProof);
     }
 
     function _hash(uint256 message) private pure returns (uint256) {
