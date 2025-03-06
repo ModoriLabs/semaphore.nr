@@ -15,6 +15,8 @@ import { Noir } from "@noir-lang/noir_js";
     const inputs = {
       indexes: "0", // NOTE: The 1th leaf has only one sibling
       message: "0x00405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5a", // uint256(keccak256(abi.encodePacked(uint256(2)))) >> 8
+      scope: "0x00290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e5", // uint256(keccak256(abi.encodePacked(uint256(0)))) >> 8
+      secret: "0x20a6dbaf36c1b5463c70994a8e81cfe5d78279108645289b282bab61367b21c",
       paths: {
         len: "2",
         storage: [
@@ -52,8 +54,6 @@ import { Noir } from "@noir-lang/noir_js";
           0,
         ],
       },
-      scope: "0x00290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e5", // uint256(keccak256(abi.encodePacked(uint256(0)))) >> 8
-      secret: "0x20a6dbaf36c1b5463c70994a8e81cfe5d78279108645289b282bab61367b21c",
     };
     const { witness } = await noir.execute(inputs);
     const { proof, publicInputs } = await honk.generateProof(witness, { keccak: true });
@@ -64,7 +64,7 @@ import { Noir } from "@noir-lang/noir_js";
     fs.writeFileSync("../semaphore/target/proof-clean2", cleanProof);
 
     // not really needed as we harcode the public input in the contract test
-    fs.writeFileSync("../semaphore/target/public-inputs", JSON.stringify(publicInputs));
+    fs.writeFileSync("../semaphore/target/public-inputs2", JSON.stringify(publicInputs));
     console.log("Done!")
   } catch (error) {
     console.error(error);
