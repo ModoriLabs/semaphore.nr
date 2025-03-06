@@ -2,7 +2,7 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-fs_permissions = [{ access = "read-write", path = "../semaphore/target/proof-clean"}]
+fs_permissions = [{ access = "read-write", path = "../semaphore/target/"}]
 remappings = [
   "poseidon-solidity/=../../node_modules/poseidon-solidity/",
   "@zk-kit/lean-imt.sol/=../../node_modules/@zk-kit/lean-imt.sol/",

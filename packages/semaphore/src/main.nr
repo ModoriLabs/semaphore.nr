@@ -60,7 +60,6 @@ fn test_commit_identity() {
 // poseidon(5B) = 0x1c23eca7cb35d494c832d3a19bab0d4abfc4fbc3958ac82650fc25ec7ab3532e
 #[test]
 fn test_main() {
-    let root = 0x00;
     let secrets = [0x01, 0x02, 0x03, 0x04, 0x05];
     let identities = [commit_identity(secrets[0]), commit_identity(secrets[1]), commit_identity(secrets[2]), commit_identity(secrets[3]), commit_identity(secrets[4])];
     // NOTE: The index of the leaf 0x05 is 0x01 because only one hash path is given
@@ -82,6 +81,38 @@ fn test_main() {
     let (root, nullifier) = main(secrets[4], indexes, paths, scope, message);
     println(f"nullifier: {nullifier}");
     println(f"root: {root}");
+
+    assert(root == expected_root);
+}
+
+// Use the fixture from https://github.com/semaphore-protocol/semaphore/blob/main/packages/contracts/test/Semaphore.ts#L326-L328
+#[test]
+fn test_main2() {
+    let secrets = [
+        923051498351556297071660122379875464705179920688629809443263349625450902044,
+        1978755119068081247093963160279604962264019399313700915496711871956252953559,
+        180011252386902481731817865914295220342827624875569997039374307850655534216,
+    ];
+    let identities = [
+        5407869850562333726769604095330004527418297248703115046359956082084347839061, // 0x0bf4bef11e443d35b2bcecdf19f25ce3f519d6be2b0e33829691083d3ea70255
+        18699903263915756199535533399390350858126023699350081471896734858638858200219,
+        4446973358529698253939037684201229393105675634248270727935122282482202195132,
+    ];
+    // NOTE: The index of the leaf 0x00 is 0x00 because only one hash path is given
+    let indexes = 0;
+    let scope = 0x00290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e5;
+    let message = 2;
+
+    let mut internal = [0x00; 32];
+    internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]);
+    println(internal[0]); // 0x06d328e1ca024bb8747475691c0eaedb37adddc8689ce68fe4114c1e039fb31d
+    let expected_root = poseidon::bn254::hash_2([internal[0], identities[2]]);
+    println(expected_root); // 0x265aad7d885c5a4d4bece302f04ac298982800c85490983594290ef693fcaf55
+
+    let paths: BoundedVec<Field, MAX_PATH_LENGTH> = BoundedVec::from_array([identities[1], identities[2]]);
+    let (root, nullifier) = main(secrets[0], indexes, paths, scope, message);
+    println(f"nullifier: {nullifier}"); // 0x15fc910d3c6dc6bf2362c2c1c15a8bebef733c5f6d4e1b2143e59cf9daaee6e9
+    println(f"root: {root}"); // 0x265aad7d885c5a4d4bece302f04ac298982800c85490983594290ef693fcaf55
 
     assert(root == expected_root);
 }
