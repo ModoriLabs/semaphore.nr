@@ -64,8 +64,8 @@ fn test_main() {
     let identities = [commit_identity(secrets[0]), commit_identity(secrets[1]), commit_identity(secrets[2]), commit_identity(secrets[3]), commit_identity(secrets[4])];
     // NOTE: The index of the leaf 0x05 is 0x01 because only one hash path is given
     let indexes = 0x01;
-    let scope = 0x00;
     let message = 0x00;
+    let scope = 0x00;
 
     let mut internal = [0x00; 32];
     internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]);
@@ -100,8 +100,8 @@ fn test_main2() {
     ];
     // NOTE: The index of the leaf 0x00 is 0x00 because only one hash path is given
     let indexes = 0;
-    let scope = 0x00290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e5;
-    let message = 2;
+    let message = 0x00405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5a; // _hash(2)
+    let scope = 0x00290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e5; // _hash(0)
 
     let mut internal = [0x00; 32];
     internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]);
