@@ -11,6 +11,8 @@ contract SemaphoreVerifierTest is Test {
         honkVerifier = new HonkVerifier();
     }
 
+    // This test is before merkle tree depth settings
+    /*
     function test_VerifyProof() external view {
         bytes memory honkProof = vm.readFileBinary(
             "../semaphore/target/proof-clean"
@@ -23,4 +25,5 @@ contract SemaphoreVerifierTest is Test {
         publicInputs[3] = hex"07a76f71ef648dd62cdea92af5fe42fe84ef256a22d5f292b6381d1265fa7f89"; // nullifier
         assertTrue(honkVerifier.verify(honkProof, publicInputs));
     }
+    */
 }

@@ -3,16 +3,20 @@ pragma solidity 0.8.28;
 
 import {Test, console} from "forge-std/Test.sol";
 import {HonkVerifier, BaseHonkVerifier} from "../src/base/HonkVerifier.sol";
+import {HonkVerificationKeys} from "../src/base/HonkVerificationKeys.sol";
+import {SemaphoreHonkVerifier} from "../src/base/SemaphoreHonkVerifier.sol";
 import {IHonkVerifier} from "../src/interfaces/IHonkVerifier.sol";
 import {SemaphoreHonk} from "../src/SemaphoreHonk.sol";
 import {ISemaphoreHonk} from "../src/interfaces/ISemaphoreHonk.sol";
 
 contract SemaphoreHonkTest is Test {
-    HonkVerifier public honkVerifier;
+    SemaphoreHonkVerifier public honkVerifier;
+    HonkVerificationKeys public verificationKeys;
     SemaphoreHonk public semaphore;
 
     function setUp() public {
-        honkVerifier = new HonkVerifier();
+        verificationKeys = new HonkVerificationKeys();
+        honkVerifier = new SemaphoreHonkVerifier(address(verificationKeys));
         semaphore = new SemaphoreHonk(IHonkVerifier(address(honkVerifier)));
     }
 
