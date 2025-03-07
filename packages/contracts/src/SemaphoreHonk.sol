@@ -181,8 +181,7 @@ contract SemaphoreHonk is ISemaphoreHonk, SemaphoreGroups {
         publicInputs[2] = bytes32(proof.merkleTreeRoot);
         publicInputs[3] = bytes32(proof.nullifier);
 
-        // TODO: choose verifier key depending on proof.merkleTreeDepth
-        return verifier.verify(proof.proof, publicInputs);
+        return verifier.verify(proof.proof, publicInputs, proof.merkleTreeDepth);
     }
 
     /// @dev Creates a keccak256 hash of a message compatible with the SNARK scalar modulus.

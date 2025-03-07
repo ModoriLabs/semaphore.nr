@@ -1,5 +1,7 @@
 set -e
 
+DEPTH=${1:-32}
+
 echo "Compiling circuit..."
 if ! nargo compile; then
     echo "Compilation failed. Exiting..."
@@ -12,6 +14,6 @@ bb write_vk_ultra_keccak_honk -b ./target/semaphore.json -o ./target/vk -c ~/.bb
 echo "Generating solidity verifier..."
 bb contract_ultra_honk -k ./target/vk -c ~/.bb-crs -o ./target/Verifier.sol
 
-mv ./target/Verifier.sol ../contracts/src/base/HonkVerifier.sol
+mv ./target/Verifier.sol ../contracts/src/base/HonkVerifier${DEPTH}.sol
 
 echo "Done"
