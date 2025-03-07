@@ -67,7 +67,7 @@ fn test_main() {
     let message = 0x01;
     let scope = 0x01;
 
-    let mut internal = [0x00; 32];
+    let mut internal = [0x00; MAX_PATH_LENGTH];
     internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]);
     println(internal[0]); // 0x06d328e1ca024bb8747475691c0eaedb37adddc8689ce68fe4114c1e039fb31d
     internal[1] = poseidon::bn254::hash_2([identities[2], identities[3]]);
@@ -103,7 +103,7 @@ fn test_main2() {
     let message = 0x00405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5a; // _hash(2)
     let scope = 0x00290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e5; // _hash(0)
 
-    let mut internal = [0x00; 32];
+    let mut internal = [0x00; MAX_PATH_LENGTH];
     internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]);
     println(internal[0]); // 0x06d328e1ca024bb8747475691c0eaedb37adddc8689ce68fe4114c1e039fb31d
     let expected_root = poseidon::bn254::hash_2([internal[0], identities[2]]);
@@ -116,3 +116,25 @@ fn test_main2() {
 
     assert(root == expected_root);
 }
+
+// Use the fixture from https://github.com/semaphore-protocol/semaphore/blob/main/packages/proof/tests/index.test.ts#L107
+#[test]
+fn test_main3() {
+    let secret = 1072931509665125050858164614503996272893941281138625620671594663472720926391;
+    let identity = commit_identity(secret); // 0x3019f11e3caaf8a73bb1bf57f7b974bc1f30432aa54e96eba2b3a325e62991dc
+    println(f"identity: {identity}");
+    let identities = [
+        1,
+        2
+    ];
+    let indexes = 1;
+    let message = 8665846418922331996225934941481656421248110469944536651334918563951783029;
+    let scope = 170164770795872309789133717676167925425155944778337387941930839678899666300;
+    let mut internal = [0x00; MAX_PATH_LENGTH];
+    internal[0] = poseidon::bn254::hash_2([identities[0], identities[1]]); // 0x115cc0f5e7d690413df64c6b9662e9cf2a3617f2743245519e19607a4417189a
+    println(internal[0]);
+    let paths: BoundedVec<Field, MAX_PATH_LENGTH> = BoundedVec::from_array([internal[0]]);
+
+    let (root, nullifier) = main(secret, indexes, paths, message, scope);
+    println(f"root: {root}"); // 0x0b0867cf8cdf56729afb9fc39a4d7217a3d84f24ef94df01d488ed9f4aec2933
+    println(f"nullifier: {nullifier}");} // 0x26c78e51c50cebab7cdc50dfedc868f2328962c48e18c70b869886d4eebdd237
