@@ -21,7 +21,7 @@ npx ts-node generate-proof2.ts # for SemaphoreHonk.t.sol
 (cd packages/contracts && forge test --optimize --optimizer-runs 5000 --gas-report)
 ```
 
-<img width="895" alt="Image" src="https://github.com/user-attachments/assets/77c9edf9-4ec7-449a-b805-4196ee55822e" />
+<img width="813" alt="Image" src="https://github.com/user-attachments/assets/f7d314bd-cc7a-4206-8dd3-cc24c1565a3a" />
 
 ## Test
 
@@ -37,9 +37,13 @@ npx ts-node generate-proof2.ts # for SemaphoreHonk.t.sol
 # main circuit
 (cd packages/semaphore && nargo test)
 
-#
+# lean_imt circuit
 (cd tests && nargo test)
 ```
+
+## NOTE
+
+- For now, the supported `MAX_DEPTH` list is `[1, 4, 8, 16, 20, 24, 28, 32]` due to the contract size limit, 24kb. If the length of `paths` is less than `MAX_DEPTH`, [`generate-proof.ts`](https://github.com/ModoriLabs/semaphore.nr/blob/main/packages/js/generate-proof.ts) will fill 0 up to `MAX_DEPTH`.
 
 ## Reference
 

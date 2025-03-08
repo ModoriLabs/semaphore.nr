@@ -20,12 +20,15 @@ contract SemaphoreHonkVerifierTest is Test {
     // depth 14 ~ 31: logN = 16
     // depth 32: logN = 17
     function test_VerifyProof_WhenTreeDepthIs1To32() external view {
-        uint256[] memory depths = new uint256[](5);
+        uint256[] memory depths = new uint256[](8);
         depths[0] = 1;
-        depths[1] = 8;
-        depths[2] = 16;
-        depths[3] = 24;
-        depths[4] = 32;
+        depths[1] = 4;
+        depths[2] = 8;
+        depths[3] = 16;
+        depths[4] = 20;
+        depths[5] = 24;
+        depths[6] = 28;
+        depths[7] = 32;
 
         bytes32[] memory publicInputs = new bytes32[](4);
         publicInputs[0] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // message
