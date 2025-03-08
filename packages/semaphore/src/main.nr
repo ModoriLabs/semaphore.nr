@@ -31,7 +31,7 @@ fn main(
     scope: pub Field,
 ) -> pub (Field, Field) {
     let leaf = commit_identity(secret);
-    // FIXME: temporary root 0x00 is given
+    // TODO: refactor. temporary root 0x00 is not necessary.
     let mt = LeanMerkleTree::from(0x00, poseidon::bn254::hash_2);
     let calculated_root = mt.calculate_root(leaf, indexes, paths);
     let nullifier = poseidon::bn254::hash_2([scope, secret]);
