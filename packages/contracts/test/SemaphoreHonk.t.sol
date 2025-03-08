@@ -34,15 +34,13 @@ contract SemaphoreHonkTest is Test {
             semaphore.addMember(groupId, identityCommitments[i]);
         }
 
-        bytes memory proof = vm.readFileBinary(
-            "../semaphore/target/proof-clean2"
-        );
+        bytes memory proof = vm.readFileBinary("../semaphore/target/proof-clean2");
 
         uint256 actualMessage = 2;
         ISemaphoreHonk.SemaphoreHonkProof memory honkProof = ISemaphoreHonk.SemaphoreHonkProof({
             merkleTreeDepth: 32,
             merkleTreeRoot: 0x265aad7d885c5a4d4bece302f04ac298982800c85490983594290ef693fcaf55,
-            nullifier:      0x15fc910d3c6dc6bf2362c2c1c15a8bebef733c5f6d4e1b2143e59cf9daaee6e9,
+            nullifier: 0x15fc910d3c6dc6bf2362c2c1c15a8bebef733c5f6d4e1b2143e59cf9daaee6e9,
             proof: proof,
             message: actualMessage + 100,
             scope: 0
@@ -62,14 +60,12 @@ contract SemaphoreHonkTest is Test {
             semaphore.addMember(groupId, identityCommitments[i]);
         }
 
-        bytes memory proof = vm.readFileBinary(
-            "../semaphore/target/proof-clean2"
-        );
+        bytes memory proof = vm.readFileBinary("../semaphore/target/proof-clean2");
 
         ISemaphoreHonk.SemaphoreHonkProof memory honkProof = ISemaphoreHonk.SemaphoreHonkProof({
             merkleTreeDepth: 32,
             merkleTreeRoot: 0x265aad7d885c5a4d4bece302f04ac298982800c85490983594290ef693fcaf55,
-            nullifier:      0x15fc910d3c6dc6bf2362c2c1c15a8bebef733c5f6d4e1b2143e59cf9daaee6e9,
+            nullifier: 0x15fc910d3c6dc6bf2362c2c1c15a8bebef733c5f6d4e1b2143e59cf9daaee6e9,
             proof: proof,
             message: 2,
             scope: 0

@@ -15,12 +15,27 @@ contract SemaphoreHonkVerifierTest is Test {
         semaphoreHonkVerifier = new SemaphoreHonkVerifier(address(verificationKeys));
     }
 
+    /*
+    // TODO:
+    function test_VerifyProof_WhenTreeDepthIs1To32() external view {
+        for (uint256 i = 1; i <= 25; i++) {
+            uint256 maxDepth = i;
+            console.log("maxDepth: ", maxDepth);
+            bytes memory honkProof =
+                vm.readFileBinary(string.concat("../semaphore/target/proof-clean-depth", vm.toString(i)));
+            // console.logBytes(honkProof);
+            assertTrue(
+                semaphoreHonkVerifier.verify(honkProof, publicInputs, maxDepth),
+                string.concat("Failed for depth: ", vm.toString(i))
+            );
+        }
+    }
+    */
+
     // when logN = 14
     function test_VerifyProof_WhenTreeDepthIs1() external view {
         uint256 maxDepth = 1;
-        bytes memory honkProof = vm.readFileBinary(
-            "../semaphore/target/proof-clean-depth1"
-        );
+        bytes memory honkProof = vm.readFileBinary("../semaphore/target/proof-clean-depth1");
         console.logBytes(honkProof);
         bytes32[] memory publicInputs = new bytes32[](4);
         publicInputs[0] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // message
@@ -33,9 +48,8 @@ contract SemaphoreHonkVerifierTest is Test {
     // when logN = 15
     function test_VerifyProof_WhenTreeDepthIs8() external view {
         uint256 maxDepth = 8;
-        bytes memory honkProof = vm.readFileBinary(
-            string.concat("../semaphore/target/proof-clean-depth", vm.toString(maxDepth))
-        );
+        bytes memory honkProof =
+            vm.readFileBinary(string.concat("../semaphore/target/proof-clean-depth", vm.toString(maxDepth)));
         console.logBytes(honkProof);
         bytes32[] memory publicInputs = new bytes32[](4);
         publicInputs[0] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // message
@@ -48,9 +62,7 @@ contract SemaphoreHonkVerifierTest is Test {
     // when logN = 16
     function test_VerifyProof_WhenTreeDepthIs28() external view {
         uint256 maxDepth = 28;
-        bytes memory honkProof = vm.readFileBinary(
-            "../semaphore/target/proof-clean-depth28"
-        );
+        bytes memory honkProof = vm.readFileBinary("../semaphore/target/proof-clean-depth28");
         console.logBytes(honkProof);
         bytes32[] memory publicInputs = new bytes32[](4);
         publicInputs[0] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // message
@@ -63,9 +75,7 @@ contract SemaphoreHonkVerifierTest is Test {
     // when logN = 17
     function test_VerifyProof_WhenTreeDepthIs32() external view {
         uint256 maxDepth = 32;
-        bytes memory honkProof = vm.readFileBinary(
-            "../semaphore/target/proof-clean-depth32"
-        );
+        bytes memory honkProof = vm.readFileBinary("../semaphore/target/proof-clean-depth32");
         bytes32[] memory publicInputs = new bytes32[](4);
         publicInputs[0] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // message
         publicInputs[1] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // scope
