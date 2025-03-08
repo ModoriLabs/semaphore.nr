@@ -2,6 +2,11 @@ node_modules
 
 packages/semaphore/Prover.toml
 packages/semaphore/target/
+!packages/semaphore/target/proof-clean-depth1
+!packages/semaphore/target/proof-clean-depth8
+!packages/semaphore/target/proof-clean-depth16
+!packages/semaphore/target/proof-clean-depth24
+!packages/semaphore/target/proof-clean-depth32
 packages/js/node_modules
 .DS_Store
 

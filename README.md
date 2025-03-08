@@ -9,29 +9,35 @@
 git submodule update
 
 # Build circuits, generate verifier contract
-(cd packages/semaphore && ./script/build.sh)
+# default depth is 32
+(cd packages/semaphore && ./script/build.sh 32)
 
 # Use JS to generate proof and save to a file
 cd js
-npm install
-npx ts-node generate-proof.ts
+npx ts-node generate-proof.ts --depth=32  # for SemaphoreHonkVerifier.t.sol default depth is 32
+npx ts-node generate-proof2.ts # for SemaphoreHonk.t.sol
 
-# foundry test read generated proof and verify
-(cd packages/contracts && forge test --optimize --optimizer-runs 5000 --gas-report -vvv)
+# foundry tests read generated proof and verify
+(cd packages/contracts && forge test --optimize --optimizer-runs 5000 --gas-report)
 ```
 
 <img width="895" alt="Image" src="https://github.com/user-attachments/assets/77c9edf9-4ec7-449a-b805-4196ee55822e" />
 
 ## Test
 
+### contracts
+
 ```sh
+(cd packages/contracts && forge test --optimize --optimizer-runs 5000 --gas-report)
+```
+
+### circuit
+
+```sh
+# main circuit
 (cd packages/semaphore && nargo test)
 
-# Use JS to generate proof and save to a file
-cd js
-npx ts-node generate-proof.ts  # for SemaphoreVerifier.t.sol
-npx ts-node generate-proof2.ts # for SemaphoreHonk.t.sol
-
+#
 (cd tests && nargo test)
 ```
 
