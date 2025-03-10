@@ -18,6 +18,7 @@ npx ts-node generate-proof.ts --depth=32  # for SemaphoreHonkVerifier.t.sol defa
 npx ts-node generate-proof2.ts # for SemaphoreHonk.t.sol
 
 # foundry tests read generated proof and verify
+cd -
 (cd packages/contracts && forge test --optimize --optimizer-runs 5000 --gas-report)
 ```
 
@@ -39,6 +40,18 @@ npx ts-node generate-proof2.ts # for SemaphoreHonk.t.sol
 
 # lean_imt circuit
 (cd tests && nargo test)
+```
+
+### UltraPlonk
+
+```sh
+(cd packages/semaphore && ./script/build.sh 32 ultra)
+
+cd js
+npx ts-node generate-ultra-proof.ts --depth=32  # for SemaphoreHonkVerifier.t.sol default depth is 32
+
+cd -
+(cd packages/contracts && forge test --mc UltraVerifierTest --optimize --optimizer-runs 5000 --gas-report)
 ```
 
 ## Contract Addresses
