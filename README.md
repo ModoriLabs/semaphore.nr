@@ -69,6 +69,15 @@ cd -
 
 - For now, the supported `MAX_DEPTH` list is `[1, 4, 8, 16, 20, 24, 28, 32]` due to the contract size limit, 24kb. If the length of `paths` is less than `MAX_DEPTH`, [`generate-proof.ts`](https://github.com/ModoriLabs/semaphore.nr/blob/main/packages/js/generate-proof.ts) will fill 0 up to `MAX_DEPTH`.
 
+## Benchmark
+
+### Proof size
+
+For the same MAX_DEPTH = 32,
+
+- [UltraPlonk](https://github.com/ModoriLabs/semaphore.nr/blob/main/packages/contracts/test/UltraVerifier.t.sol#L17): 2144 bytes
+- [UltraHonk](https://github.com/ModoriLabs/semaphore.nr/blob/main/packages/contracts/test/SemaphoreHonkVerifier.t.sol#L94): 14176 bytes
+
 ## Reference
 
 - <https://github.com/vplasencia/semaphore-benchmarks/blob/main/circom-snarkjs/circuits/semaphore-v4/semaphore-v4.circom>

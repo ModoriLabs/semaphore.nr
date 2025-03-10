@@ -92,6 +92,7 @@ contract SemaphoreHonkVerifierTest is Test {
     function test_VerifyProof_WhenTreeDepthIs32() external view {
         uint256 maxDepth = 32;
         bytes memory honkProof = vm.readFileBinary("../semaphore/target/proof-clean-depth32");
+        console.log("honkProof.length", honkProof.length); // 14176
         bytes32[] memory publicInputs = new bytes32[](4);
         publicInputs[0] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // message
         publicInputs[1] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // scope
