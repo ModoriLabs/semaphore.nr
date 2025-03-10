@@ -14,6 +14,7 @@ contract UltraVerifierTest is Test {
     function test_VerifyProof() external {
         bytes memory proof =
             vm.readFileBinary(string.concat("../semaphore/target/proof-clean-ultra-depth32"));
+        console.log("proof.length", proof.length); // 2144
 
         bytes32[] memory publicInputs = new bytes32[](4);
         publicInputs[0] = hex"0000000000000000000000000000000000000000000000000000000000000001"; // message
