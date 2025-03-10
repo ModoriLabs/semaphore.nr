@@ -41,6 +41,17 @@ npx ts-node generate-proof2.ts # for SemaphoreHonk.t.sol
 (cd tests && nargo test)
 ```
 
+## Contract Addresses
+
+### sepolia
+
+| Contracts              | Address                                                                                                                         |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| Feedback                   | [0x442dc178c85cd331d5e727348b23758ff2ca4d2f](https://sepolia.etherscan.io/address/0x442dc178c85cd331d5e727348b23758ff2ca4d2f) |
+| Semaphore                   | [0xccd53b41c34edd285837ea4604e62018762bead1](https://sepolia.etherscan.io/address/0xccd53b41c34edd285837ea4604e62018762bead1) |
+| SemaphoreHonkVerifier                   | [0xc2732ece3b48c8679820ca9fff5c0c842a17e963](https://sepolia.etherscan.io/address/0xc2732ece3b48c8679820ca9fff5c0c842a17e963) |
+| HonkVerificationKeys                   | [0x68744c134c0d3e2aba1e0ef54a68a4bb56775cb2](https://sepolia.etherscan.io/address/0x68744c134c0d3e2aba1e0ef54a68a4bb56775cb2) |
+
 ## NOTE
 
 - For now, the supported `MAX_DEPTH` list is `[1, 4, 8, 16, 20, 24, 28, 32]` due to the contract size limit, 24kb. If the length of `paths` is less than `MAX_DEPTH`, [`generate-proof.ts`](https://github.com/ModoriLabs/semaphore.nr/blob/main/packages/js/generate-proof.ts) will fill 0 up to `MAX_DEPTH`.

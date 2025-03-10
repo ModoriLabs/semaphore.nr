@@ -2,13 +2,20 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-fs_permissions = [{ access = "read-write", path = "../semaphore/target/"}]
+fs_permissions = [
+  { access = "read-write", path = "../semaphore/target/"},
+  { access = "read-write", path = "deployments/"}
+]
 remappings = [
   "poseidon-solidity/=../../node_modules/poseidon-solidity/",
   "@zk-kit/lean-imt.sol/=../../node_modules/@zk-kit/lean-imt.sol/",
 ]
 allow_paths = ["../../node_modules"]
-
+optimizer = true
+optimizer_runs = 5000
 ffi = true
+
+[rpc_endpoints]
+  sepolia = "https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_KEY}"
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
