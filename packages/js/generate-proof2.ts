@@ -4,11 +4,23 @@ import circuit from "../semaphore/target/semaphore.json";
 // @ts-ignore
 import { Noir } from "@noir-lang/noir_js";
 
+const args = process.argv.slice(2);
+const depthArg = args.find(arg => arg.startsWith('--depth='));
 
 (async () => {
   try {
     const noir = new Noir(circuit as any);
     const honk = new UltraHonkBackend(circuit.bytecode, { threads: 1 });
+    const depth = depthArg ? parseInt(depthArg.split('=')[1]) : 32;
+    const initialStorage = [
+      "0x2957c52a09aab60772031408ba9045ff20f391dd5586fc90287c8bb838a5249b",
+      "0x9d4e5d15581fa78e26f737acf3c82cf22cae0f840f3ab6ee64d7189ae8634bc",
+    ];
+
+    const storageArray = [
+      ...initialStorage,
+      ...Array(depth - initialStorage.length).fill(0)
+    ];
 
     // Three leaves case in test_main2
     // https://github.com/semaphore-protocol/semaphore/blob/main/packages/contracts/test/Semaphore.ts#L326-L328
@@ -19,40 +31,7 @@ import { Noir } from "@noir-lang/noir_js";
       secret: "0x20a6dbaf36c1b5463c70994a8e81cfe5d78279108645289b282bab61367b21c",
       paths: {
         len: "2",
-        storage: [
-          "0x2957c52a09aab60772031408ba9045ff20f391dd5586fc90287c8bb838a5249b",
-          "0x9d4e5d15581fa78e26f737acf3c82cf22cae0f840f3ab6ee64d7189ae8634bc",
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-        ],
+        storage: storageArray,
       },
     };
     const { witness } = await noir.execute(inputs);
@@ -65,6 +44,7 @@ import { Noir } from "@noir-lang/noir_js";
 
     // not really needed as we harcode the public input in the contract test
     fs.writeFileSync("../semaphore/target/public-inputs2", JSON.stringify(publicInputs));
+    console.log("Proof generated and saved to ../semaphore/target/proof-clean2");
     console.log("Done!")
   } catch (error) {
     console.error(error);

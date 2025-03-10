@@ -42,6 +42,7 @@ const depthArg = args.find(arg => arg.startsWith('--depth='));
 
     // not really needed as we harcode the public input in the contract test
     fs.writeFileSync("../semaphore/target/public-inputs", JSON.stringify(publicInputs));
+    console.log("Proof generated and saved to ../semaphore/target/proof-clean-depth${depth}");
   } catch (error) {
     console.error(error);
   }
